@@ -1,0 +1,85 @@
+apiVersion: 1
+
+datasources:
+  - name: PromCorrelation
+    # <string, required> datasource type. Required
+    type: prometheus
+    # <string, required> access mode. direct or proxy. Required
+    access: proxy
+    # <int> org id. will default to orgId 1 if not specified
+    orgId: 1
+    # <string> url
+    url: https://prometheus-us-central1.grafana.net/api/prom
+    # <string> database password, if used
+    # password: 
+    # <string> database user, if used
+    # user: 
+    # <string> database name, if used
+    # database:
+    # <bool> enable/disable basic auth
+    basicAuth: true
+    # <string> basic auth username
+    basicAuthUser: 9772
+    # <string> basic auth password
+    basicAuthPassword: eyJrIjoiZTcyNTc0MTczZWE2MWI5ZDljN2JjODgxNGM2ZWRjM2ExYjI2NGQwYSIsIm4iOiJ3b3Jrc2hvcCIsImlkIjoyNTc1MzR9
+    # <bool> enable/disable with credentials headers
+    # withCredentials:
+    # <bool> mark as default datasource. Max one per org
+    isDefault: true
+    # <map> fields that will be converted to json and stored in json_data
+    # jsonData:
+    #    graphiteVersion: "1.1"
+    #    tlsAuth: true
+    #    tlsAuthWithCACert: true
+    #    httpHeaderName1: "Authorization"
+    # <string> json object of data that will be encrypted.
+    # secureJsonData:
+    #   tlsCACert: "..."
+    #   tlsClientCert: "..."
+    #   tlsClientKey: "..."
+    #   httpHeaderValue1: "Bearer xf5yhfkpsnmgo"
+    version: 1
+    # <bool> allow users to edit datasources from the UI.
+    editable: true
+
+  - name: TempoCorrelation
+    type: tempo
+    access: proxy
+    orgId: 1
+    url: https://tempo-us-central1.grafana.net/tempo
+    basicAuth: true
+    basicAuthUser: 78
+    basicAuthPassword: eyJrIjoiZTcyNTc0MTczZWE2MWI5ZDljN2JjODgxNGM2ZWRjM2ExYjI2NGQwYSIsIm4iOiJ3b3Jrc2hvcCIsImlkIjoyNTc1MzR9
+    version: 1
+    editable: true
+
+  - name: LokiCorrelation
+    type: loki
+    access: proxy
+    uid: P8E80F9AEF21F6940
+    orgId: 1
+    url: https://logs-prod-us-central1.grafana.net
+    basicAuth: true
+    basicAuthUser: 3965
+    basicAuthPassword: eyJrIjoiZTcyNTc0MTczZWE2MWI5ZDljN2JjODgxNGM2ZWRjM2ExYjI2NGQwYSIsIm4iOiJ3b3Jrc2hvcCIsImlkIjoyNTc1MzR9
+    jsonData:
+      derivedFields:
+        - datasourceUid: TempoCorrelation
+          matcherRegex: '.*tempo_trace_id".*?"(.*?)".*'
+          name: TraceId
+          url: "${__value.raw}"
+    version: 1
+    editable: true
+
+  - name: LokiNGINX
+    type: loki
+    access: proxy
+    orgId: 1
+    url: https://logs-prod-us-central1.grafana.net
+    basicAuth: true
+    basicAuthUser: 3965
+    basicAuthPassword: eyJrIjoiZTcyNTc0MTczZWE2MWI5ZDljN2JjODgxNGM2ZWRjM2ExYjI2NGQwYSIsIm4iOiJ3b3Jrc2hvcCIsImlkIjoyNTc1MzR9
+    version: 1
+    editable: true
+
+
